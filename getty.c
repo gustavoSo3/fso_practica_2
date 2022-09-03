@@ -4,8 +4,9 @@
 #include <sys/wait.h>
 #include <string.h>
 #define chars 50
+#define N_LINES 12
 
-char lineas[12][chars];
+char lineas[N_LINES][chars];
 
 int main(int argc, char *argv[]){
 	
@@ -33,15 +34,19 @@ int main(int argc, char *argv[]){
 	strcat(usrypass,user);
 	strcat(usrypass,":");
 	strcat(usrypass,pw);
-	for(int i =0;i<
+	for(int i =0;i<N_LINES; i++){
+		if(strcmp(usrypass, lineas[i]) == 0){
+			p=fork();
+			if(p==0)
+				execlp("./sh","sh",argv[1],NULL);
+					
+			wait(NULL);
+		}
+	}
 	//aqui esta para validar con el archivo
 	//validarla con archivo de pws.txt
 	//si es correcta hace lo de abajo.
-	p=fork();
-		if(p==0)
-			execlp("./sh","sh",argv[1],NULL);
-			
-	wait(NULL);
+	
 	
 	}
 }
