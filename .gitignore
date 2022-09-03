@@ -1,3 +1,6 @@
-*_exec
+init
+getty
+sh
+
 .DS_Store
 
