@@ -5,14 +5,18 @@
 #include <signal.h>
 #include <sys/wait.h>
 
+#define MAX_INPUT_LEN 500
+
+int n_args = 0;
+
 char** get_arguments(){
 
-  char input[80];
-  int n_args = 0;
-  char **arguments = malloc(sizeof(char*));
+  char input[MAX_INPUT_LEN];
+  n_args = 0;
+  char**arguments = malloc(sizeof(char*));
   int i = 0;
   fflush(stdout);
-  read(0, input, 80);
+  read(0, input, MAX_INPUT_LEN);
   int end_argument_i = 0;
   int start_argument_i = 0;
   if(*(input+i) == '\n' || *(input+i)=='\r'){
@@ -24,13 +28,15 @@ char** get_arguments(){
     if(*(input+i+1) == ' ' || *(input+i+1) == '\n' || *(input+i)=='\r'){
       char *new_argument = malloc(sizeof(char)*end_argument_i - start_argument_i + 1); //+1 to add \0
       strncpy(new_argument, input + start_argument_i, end_argument_i - start_argument_i);
-	  n_args++;
+      n_args++;
       arguments = realloc(arguments, sizeof(char*) * n_args);
       arguments[n_args-1] = new_argument;
       start_argument_i = end_argument_i + 1;
     }
     i++;
   }
+  arguments = realloc(arguments, sizeof(char*) * n_args + 1);
+  arguments[n_args] = NULL;
   return arguments;
 } 
 
@@ -57,8 +63,7 @@ int main(int argc, char *argv[]){
 				execvp(cmd[0],cmd);
 			}
 			else{
-			 int numargs= sizeof(cmd)/sizeof(char*);
-				if(strcmp(cmd[numargs-1], "&")!=0)
+				if(strcmp(cmd[n_args-1], "&")!=0)
 					wait(NULL);
 						
 			}
