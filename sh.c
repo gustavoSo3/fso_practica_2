@@ -62,6 +62,7 @@ int main(int argc, char *argv[]){
 					wait(NULL);
 						
 			}
+			
 		}
 	}
 	printf("termina la exe del shell \n");

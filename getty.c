@@ -3,7 +3,9 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <string.h>
+
 #define chars 50
+
 #define N_LINES 12
 
 char lineas[N_LINES][chars];
@@ -21,32 +23,33 @@ int main(int argc, char *argv[]){
 			line++;
 	fclose(fp);
 	
-	
-	printf("Pid de init es %s \n",argv[1]);
-	
 	while(1){
 
-	printf("User:");
-	scanf("%s",user);
-	printf("Password:");
-	scanf("%s",pw);
-	char usrypass[44];
-	strcat(usrypass,user);
-	strcat(usrypass,":");
-	strcat(usrypass,pw);
-	for(int i =0;i<N_LINES; i++){
-		if(strcmp(usrypass, lineas[i]) == 0){
-			p=fork();
+		printf("User:");
+		scanf("%s",user);
+		printf("Password:");
+		scanf("%s",pw);
+		char usrypass[44];
+		strcat(usrypass,user);
+		strcat(usrypass,":");
+		strcat(usrypass,pw);
+		strcat(usrypass,"\n");
+
+		int auth = 0;
+		for(int i =0;i<N_LINES; i++){
+			if(strcmp(usrypass, lineas[i]) == 0)
+				auth = 1;
+		}
+		//aqui esta para validar con el archivo
+		//validarla con archivo de pws.txt
+		//si es correcta hace lo de abajo.
+		if(auth){
+			p=fork();	
 			if(p==0)
 				execlp("./sh","sh",argv[1],NULL);
-					
+
 			wait(NULL);
 		}
-	}
-	//aqui esta para validar con el archivo
-	//validarla con archivo de pws.txt
-	//si es correcta hace lo de abajo.
-	
-	
+		strcpy(usrypass, "");
 	}
 }
