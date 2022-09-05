@@ -13,7 +13,7 @@ int main(int argc, char *argv[])
 	char user_credential_entries[MAX_USERS_ALLOWED][MAX_INPUT_CHAR_LEN];
 	char user[MAX_INPUT_CHAR_LEN], pw[MAX_INPUT_CHAR_LEN];
 
-	FILE *fp = fopen("passwd.txt", "r");
+	FILE *fp = fopen("passwd", "r");
 	int read_lines = 0;
 
 	while (!feof(fp))
