@@ -4,52 +4,48 @@
 #include <sys/wait.h>
 #include <string.h>
 
-#define chars 50
+#define MAX_INPUT_CHAR_LEN 50
+#define MAX_USERS_ALLOWED 12
 
-#define N_LINES 12
+int main(int argc, char *argv[])
+{
 
-char lineas[N_LINES][chars];
+	char user_credential_entries[MAX_USERS_ALLOWED][MAX_INPUT_CHAR_LEN];
+	char user[MAX_INPUT_CHAR_LEN], pw[MAX_INPUT_CHAR_LEN];
 
-int main(int argc, char *argv[]){
-	
-	int p;
-	char user[20],pw[20];			
-	
-	FILE *fp =fopen("passwd.txt","r");
-	int line=0;
-	
-	while(!feof(fp))
-		if(fgets(lineas[line],chars,fp) !=NULL)
-			line++;
+	FILE *fp = fopen("passwd.txt", "r");
+	int read_lines = 0;
+
+	while (!feof(fp))
+		if (fgets(user_credential_entries[read_lines], MAX_INPUT_CHAR_LEN, fp) != NULL)
+			read_lines++;
 	fclose(fp);
-	
-	while(1){
 
-		printf("User:");
-		scanf("%s",user);
-		printf("Password:");
-		scanf("%s",pw);
-		char usrypass[44];
-		strcat(usrypass,user);
-		strcat(usrypass,":");
-		strcat(usrypass,pw);
-		strcat(usrypass,"\n");
+	while (1)
+	{
+		scanf("User:%s", user);
+		scanf("Password:%s", pw);
 
-		int auth = 0;
-		for(int i =0;i<N_LINES; i++){
-			if(strcmp(usrypass, lineas[i]) == 0)
-				auth = 1;
+		char user_and_password[MAX_INPUT_CHAR_LEN * 2 + 2];
+		strcat(user_and_password, user);
+		strcat(user_and_password, ":");
+		strcat(user_and_password, pw);
+		strcat(user_and_password, "\n");
+
+		int valid_credentials = 0;
+		for (int i = 0; i < read_lines + 1; i++)
+		{
+			if (strcmp(user_and_password, user_credential_entries[i]) == 0)
+				valid_credentials = 1;
 		}
-		//aqui esta para validar con el archivo
-		//validarla con archivo de pws.txt
-		//si es correcta hace lo de abajo.
-		if(auth){
-			p=fork();	
-			if(p==0)
-				execlp("./sh","sh",argv[1],NULL);
+		if (valid_credentials)
+		{
+			pid_t p = fork();
+			if (p == 0)
+				execlp("./sh", "sh", argv[1], NULL);
 
 			wait(NULL);
 		}
-		strcpy(usrypass, "");
+		strcpy(user_and_password, "");
 	}
 }
