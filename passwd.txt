@@ -1,7 +1,0 @@
-juan:juan
-gus:gus
-profe:profe
-admin:admin
-1:1
-l:l
-a:a
