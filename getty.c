@@ -23,8 +23,10 @@ int main(int argc, char *argv[])
 
 	while (1)
 	{
-		scanf("User:%s", user);
-		scanf("Password:%s", pw);
+		printf("User:");
+		scanf("%s", user);
+		printf("Password:");
+		scanf("%s", pw);
 
 		char user_and_password[MAX_INPUT_CHAR_LEN * 2 + 2];
 		strcat(user_and_password, user);

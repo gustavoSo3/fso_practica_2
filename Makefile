@@ -9,4 +9,4 @@ getty: getty.c
 sh:sh.c
 	gcc -o sh sh.c
 clean:
-	rm init getty
+	rm init getty sh
